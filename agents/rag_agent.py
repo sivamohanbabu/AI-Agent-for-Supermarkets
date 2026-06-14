@@ -103,7 +103,13 @@ class RagAssistant:
         context_text = " ".join(context["text"] for context in contexts)
         normalized_query = query.lower()
 
-        if "30%" in normalized_query or "3 day" in normalized_query or "3-day" in normalized_query:
+        if "expired" in normalized_query or "dispose" in normalized_query or "discard" in normalized_query or "0%" in normalized_query:
+            answer = (
+                "According to supermarket safety policy and FSSAI guidelines, expired products "
+                "or items marked for disposal must be immediately removed from shelves. "
+                "No discounts or donations are permitted, resulting in a 0% discount campaign."
+            )
+        elif "30%" in normalized_query or "3 day" in normalized_query or "3-day" in normalized_query:
             answer = (
                 "According to supermarket policy, products expiring within 3 days "
                 "must receive a 30% discount to minimize food waste."

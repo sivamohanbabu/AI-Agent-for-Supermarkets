@@ -159,7 +159,7 @@ def inject_theme() -> None:
         }
         .status-row {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 12px;
         }
         .status-box {
@@ -177,6 +177,7 @@ def inject_theme() -> None:
             color: var(--muted);
             font-size: .9rem;
         }
+        .expired { border-top: 4px solid #7f8c8d; }
         .critical { border-top: 4px solid var(--coral); }
         .warning { border-top: 4px solid var(--amber); }
         .attention { border-top: 4px solid var(--indigo); }
@@ -563,12 +564,14 @@ def main() -> None:
             "Waste Reduction Actions",
             "Expiry monitoring, dynamic pricing, and rescue recommendations in one workflow.",
         )
+        expired_count = int((rescue["expiry_status"] == "Expired").sum())
         critical_count = int((rescue["expiry_status"] == "Critical").sum())
         warning_count = int((rescue["expiry_status"] == "Warning").sum())
         attention_count = int((rescue["expiry_status"] == "Attention").sum())
         st.markdown(
             f"""
             <div class="status-row">
+                <div class="status-box expired"><strong>{expired_count}</strong><span>Expired products: remove from sale</span></div>
                 <div class="status-box critical"><strong>{critical_count}</strong><span>Critical products: expiry within 3 days</span></div>
                 <div class="status-box warning"><strong>{warning_count}</strong><span>Warning products: expiry within 7 days</span></div>
                 <div class="status-box attention"><strong>{attention_count}</strong><span>Attention products: expiry within 15 days</span></div>

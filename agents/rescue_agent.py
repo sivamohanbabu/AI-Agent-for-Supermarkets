@@ -9,6 +9,8 @@ def rescue_recommendation(row: pd.Series) -> str:
     daily_sales = max(float(row.get("daily_sales_avg", 1)), 1)
     cover_days = stock / daily_sales
 
+    if days < 0:
+        return "Dispose/Discard (Expired)"
     if days <= 3 and cover_days > 2:
         return "NGO Donation"
     if days <= 3:
