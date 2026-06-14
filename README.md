@@ -25,7 +25,7 @@ streamlit run app.py
 
 ## Phase 2 Status
 
-- Demand forecasting agent with XGBoost when available and a scikit-learn fallback
+- Demand forecasting agent using a lightweight trend model suitable for fast demos
 - Sales trend visualization
 - Inventory optimization agent
 - Overstock, understock, and reorder recommendations
@@ -35,3 +35,37 @@ streamlit run app.py
 - Expiry monitoring agent with Critical, Warning, Attention, and Normal bands
 - Dynamic pricing agent using 30%, 20%, and 10% discount rules
 - Food rescue recommendation agent for discount campaigns, bundles, NGO donation, and store transfer
+
+## Phase 4 Status
+
+- RAG assistant over policy documents in `knowledge_base/`
+- ChromaDB persistent vector database in `vector_db/` when dependencies are installed
+- Lightweight RAG flow with ChromaDB persistence when available
+- Supervisor agent that combines forecasting, inventory, expiry, pricing, rescue, and RAG outputs
+- Final recommendation report download from Streamlit
+
+## Architecture
+
+```text
+Supervisor Agent
+       |
+       |---- Forecasting Agent
+       |
+       |---- Inventory Agent
+       |
+       |---- Expiry Agent
+       |
+       |---- Pricing Agent
+       |
+       |---- RAG Assistant Agent
+       |
+       V
+ Final Recommendation Report
+```
+
+## Deployment
+
+1. Push this repository to GitHub.
+2. Create a new app in Streamlit Community Cloud.
+3. Select `app.py` as the entry point.
+4. Add demo screenshots and a walkthrough video under `assets/screenshots/` before final submission.

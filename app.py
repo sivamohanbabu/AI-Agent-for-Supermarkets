@@ -12,10 +12,14 @@ from agents.inventory_agent import optimize_inventory
 from agents.expiry_agent import monitor_expiry
 from agents.pricing_agent import apply_dynamic_pricing
 from agents.rescue_agent import recommend_food_rescue
+from agents.rag_agent import RagAssistant
+from agents.supervisor_agent import final_recommendation_report
 
 
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
+KNOWLEDGE_BASE_DIR = BASE_DIR / "knowledge_base"
+VECTOR_DB_DIR = BASE_DIR / "vector_db"
 
 
 st.set_page_config(
@@ -84,8 +88,8 @@ def main() -> None:
     sales = uploaded_or_sample(sales_file, DATA_DIR / "sales_data.csv")
     inventory = prepare_inventory(uploaded_or_sample(inventory_file, DATA_DIR / "inventory.csv"))
 
-    dashboard_tab, forecast_tab, waste_tab = st.tabs(
-        ["Dashboard", "Forecasting & Optimization", "Waste Reduction"]
+    dashboard_tab, forecast_tab, waste_tab, ai_tab = st.tabs(
+        ["Dashboard", "Forecasting & Optimization", "Waste Reduction", "RAG + Supervisor"]
     )
 
     with dashboard_tab:
@@ -218,6 +222,26 @@ Recommended Reorder:
             ],
             use_container_width=True,
             hide_index=True,
+        )
+
+    with ai_tab:
+        st.subheader("RAG Assistant Agent")
+        rag = RagAssistant(KNOWLEDGE_BASE_DIR, VECTOR_DB_DIR)
+        query = st.text_input("Ask a policy question", value="Why was yogurt given a 30% discount?")
+        response = rag.answer(query)
+        st.write(response.answer)
+        if response.sources:
+            st.caption("Sources: " + ", ".join(response.sources))
+
+        st.subheader("Supervisor Agent")
+        report = final_recommendation_report(sales, inventory, KNOWLEDGE_BASE_DIR, VECTOR_DB_DIR)
+        st.dataframe(report, use_container_width=True, hide_index=True)
+        csv = report.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "Download Final Recommendation Report",
+            data=csv,
+            file_name="final_recommendation_report.csv",
+            mime="text/csv",
         )
 
         st.markdown("#### Dynamic Pricing Agent")
