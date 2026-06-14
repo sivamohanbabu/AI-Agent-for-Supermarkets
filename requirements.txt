@@ -3,6 +3,7 @@ pandas>=2.2
 numpy>=1.26
 plotly>=5.22
 scikit-learn>=1.4
+xgboost>=2.0
 chromadb>=0.5
 langchain>=0.2
 langchain-community>=0.2

@@ -22,3 +22,10 @@ streamlit run app.py
 - Dashboard home page
 - KPI cards for total products, inventory value, expiring products, and waste risk score
 - Bundled sample datasets in `data/`
+
+## Phase 2 Status
+
+- Demand forecasting agent with XGBoost when available and a scikit-learn fallback
+- Sales trend visualization
+- Inventory optimization agent
+- Overstock, understock, and reorder recommendations

@@ -7,6 +7,9 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
+from agents.forecasting_agent import forecast_product_demand, sales_trend
+from agents.inventory_agent import optimize_inventory
+
 
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
@@ -78,49 +81,107 @@ def main() -> None:
     sales = uploaded_or_sample(sales_file, DATA_DIR / "sales_data.csv")
     inventory = prepare_inventory(uploaded_or_sample(inventory_file, DATA_DIR / "inventory.csv"))
 
-    render_metric_cards(inventory)
+    dashboard_tab, forecast_tab = st.tabs(["Dashboard", "Forecasting & Optimization"])
 
-    st.subheader("Dashboard Home")
-    left, right = st.columns([1.2, 1])
+    with dashboard_tab:
+        render_metric_cards(inventory)
 
-    with left:
-        st.markdown("#### Inventory Overview")
-        st.dataframe(
-            inventory[
-                [
-                    "product_name",
-                    "category",
-                    "current_stock",
-                    "unit_cost",
-                    "expiry_date",
-                    "days_to_expiry",
-                    "stock_value",
-                ]
-            ],
-            use_container_width=True,
-            hide_index=True,
-        )
+        st.subheader("Dashboard Home")
+        left, right = st.columns([1.2, 1])
 
-    with right:
-        st.markdown("#### Inventory Value by Category")
-        value_by_category = (
-            inventory.groupby("category", as_index=False)["stock_value"].sum().sort_values(
-                "stock_value", ascending=False
+        with left:
+            st.markdown("#### Inventory Overview")
+            st.dataframe(
+                inventory[
+                    [
+                        "product_name",
+                        "category",
+                        "current_stock",
+                        "unit_cost",
+                        "expiry_date",
+                        "days_to_expiry",
+                        "stock_value",
+                    ]
+                ],
+                use_container_width=True,
+                hide_index=True,
             )
+
+        with right:
+            st.markdown("#### Inventory Value by Category")
+            value_by_category = (
+                inventory.groupby("category", as_index=False)["stock_value"].sum().sort_values(
+                    "stock_value", ascending=False
+                )
+            )
+            st.plotly_chart(
+                px.bar(
+                    value_by_category,
+                    x="category",
+                    y="stock_value",
+                    color="category",
+                    labels={"stock_value": "Inventory Value", "category": "Category"},
+                ),
+                use_container_width=True,
+            )
+
+        st.markdown("#### Sales Data Preview")
+        st.dataframe(sales.head(100), use_container_width=True, hide_index=True)
+
+    with forecast_tab:
+        st.subheader("Demand Forecasting Agent")
+        product_options = dict(zip(inventory["product_name"], inventory["product_id"]))
+        selected_product = st.selectbox("Product", list(product_options.keys()))
+        selected_product_id = product_options[selected_product]
+        horizon = st.slider("Forecast horizon", min_value=3, max_value=21, value=7)
+
+        forecast = forecast_product_demand(sales, selected_product_id, periods=horizon)
+        trend = sales_trend(sales, selected_product_id)
+
+        chart_data = pd.concat(
+            [
+                trend.rename(columns={"units_sold": "units"}).assign(series="Actual Sales"),
+                forecast.forecast.rename(columns={"forecast_units": "units"}).assign(
+                    series="Forecast"
+                ),
+            ],
+            ignore_index=True,
         )
         st.plotly_chart(
-            px.bar(
-                value_by_category,
-                x="category",
-                y="stock_value",
-                color="category",
-                labels={"stock_value": "Inventory Value", "category": "Category"},
+            px.line(
+                chart_data,
+                x="date",
+                y="units",
+                color="series",
+                markers=True,
+                labels={"units": "Units", "date": "Date"},
             ),
             use_container_width=True,
         )
 
-    st.markdown("#### Sales Data Preview")
-    st.dataframe(sales.head(100), use_container_width=True, hide_index=True)
+        current_stock = int(
+            inventory.loc[inventory["product_id"] == selected_product_id, "current_stock"].iloc[0]
+        )
+        reorder_units = max(0, forecast.forecasted_demand - current_stock)
+        st.code(
+            f"""{forecast.product_name}:
+Current Stock: {current_stock}
+
+Forecasted Demand: {forecast.forecasted_demand}
+
+Recommended Reorder:
+{reorder_units} Units""",
+            language="text",
+        )
+
+        st.subheader("Inventory Optimization Agent")
+        all_forecasts = {
+            product_id: forecast_product_demand(sales, product_id, periods=7).forecasted_demand
+            for product_id in inventory["product_id"].unique()
+            if product_id in set(sales["product_id"])
+        }
+        optimization = optimize_inventory(inventory, all_forecasts)
+        st.dataframe(optimization, use_container_width=True, hide_index=True)
 
 
 if __name__ == "__main__":
