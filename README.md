@@ -1,4 +1,5 @@
 # Smart Food Waste Reduction AI Agent for Supermarkets
+<img width="1360" height="644" alt="image" src="https://github.com/user-attachments/assets/e9abc201-6f10-4935-90c4-191cf5dbd01e" />
 
 ## Project Overview
 
