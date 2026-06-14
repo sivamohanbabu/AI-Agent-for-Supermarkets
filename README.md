@@ -1,56 +1,143 @@
 # Smart Food Waste Reduction AI Agent for Supermarkets
 
-## Overview
+## Project Overview
 
-Smart Food Waste Reduction AI Agent is an AI-powered solution designed to help supermarkets reduce food waste, optimize inventory, and improve profitability. The system combines Machine Learning, Agentic AI, and Retrieval-Augmented Generation (RAG) to provide intelligent recommendations for demand forecasting, inventory management, expiry monitoring, and dynamic pricing.
+Smart Food Waste Reduction AI Agent is an AI-powered inventory intelligence platform designed to help supermarkets reduce food waste, optimize stock levels, and improve profitability through data-driven decision-making.
+
+The system leverages historical sales data and inventory information to identify waste risks, forecast product demand, recommend inventory actions, and generate actionable insights for supermarket managers.
+
+---
 
 ## Problem Statement
 
-Food waste is a significant challenge in the retail industry. Supermarkets often face losses due to overstocking, inaccurate demand forecasting, and products reaching their expiry dates before being sold. This project aims to address these challenges through data-driven decision-making and AI-powered automation.
+Food retailers frequently face challenges such as:
+
+* Overstocking perishable products
+* Product expiration before sale
+* Inventory holding costs
+* Revenue loss due to inaccurate demand planning
+
+This project addresses these challenges by combining Machine Learning, Agentic AI, and Business Analytics to improve inventory efficiency and reduce food waste.
+
+---
+
+## Dataset Description
+
+### Sales Dataset
+
+File: `final_large_sales_data.csv`
+
+Columns:
+
+* date
+* product_id
+* product_name
+* units_sold
+* revenue
+
+Purpose:
+
+* Sales trend analysis
+* Demand forecasting
+* Product performance evaluation
+
+### Inventory Dataset
+
+File: `final_large_inventory.csv`
+
+Columns:
+
+* product_id
+* product_name
+* category
+* current_stock
+* unit_cost
+* selling_price
+* expiry_date
+* daily_sales_avg
+* shelf_life_days
+* supplier
+
+Purpose:
+
+* Inventory monitoring
+* Waste risk assessment
+* Expiry management
+* Stock optimization
+
+---
 
 ## Key Features
 
 ### Demand Forecasting Agent
 
-* Predicts future product demand using historical sales data.
-* Supports forecasting models such as Prophet and XGBoost.
-* Identifies sales trends and seasonality.
+Uses historical sales records to:
+
+* Analyze sales patterns
+* Forecast future demand
+* Identify high-demand products
+* Support inventory planning
 
 ### Inventory Optimization Agent
 
-* Compares current inventory against forecasted demand.
-* Detects overstocked and understocked products.
-* Recommends optimal reorder quantities.
+Analyzes:
+
+* Current stock levels
+* Daily sales averages
+* Product demand
+
+Generates:
+
+* Reorder recommendations
+* Overstock alerts
+* Understock alerts
 
 ### Expiry Monitoring Agent
 
-* Tracks products nearing expiry.
-* Categorizes products based on expiry risk.
-* Generates alerts for critical inventory.
+Monitors:
 
-### Dynamic Pricing Agent
+* Expiry dates
+* Shelf life
+* Current stock
 
-* Recommends discount strategies for near-expiry products.
-* Helps maximize sales before product expiration.
-* Reduces waste while improving revenue recovery.
+Risk Categories:
 
-### Food Rescue Recommendation Agent
+* Critical Risk
+* Medium Risk
+* Low Risk
 
-* Suggests product bundling offers.
-* Recommends donations to food banks and NGOs.
-* Identifies opportunities to transfer stock between stores.
+Provides proactive alerts for products nearing expiry.
 
-### RAG-Based AI Assistant
+### Waste Reduction Agent
 
-* Answers questions related to inventory policies, food safety, and waste reduction.
-* Uses LangChain and ChromaDB for document retrieval.
-* Supports supermarket operational decision-making.
+Identifies products likely to become waste and recommends:
 
-### Supervisor AI Agent
+* Promotional campaigns
+* Inventory transfers
+* Stock reduction strategies
+* Clearance sales
 
-* Coordinates all specialized agents.
-* Aggregates recommendations.
-* Generates actionable business reports.
+### Profitability Analysis
+
+Calculates:
+
+* Revenue generated
+* Inventory value
+* Potential losses due to expiry
+* Estimated savings from recommendations
+
+### AI Insights Dashboard
+
+Displays:
+
+* Total Products
+* Total Inventory Value
+* Total Revenue
+* Products Near Expiry
+* Waste Risk Score
+* Recommended Actions
+
+---
 
 ## Technology Stack
 
@@ -69,11 +156,12 @@ Food waste is a significant challenge in the retail industry. Supermarkets often
 
 * Prophet
 * XGBoost
-* Scikit-learn
+* Scikit-Learn
 
 ### Agentic AI
 
-* LangGraph or CrewAI
+* LangGraph
+* CrewAI
 
 ### RAG
 
@@ -86,78 +174,50 @@ Food waste is a significant challenge in the retail industry. Supermarkets often
 
 ### LLM
 
-* OpenAI GPT Models
+* OpenAI GPT
 * Ollama (Llama 3)
 
-## Project Architecture
+---
 
-Sales Data → Forecasting Agent → Inventory Agent → Expiry Agent → Pricing Agent → RAG Assistant → Supervisor Agent → Dashboard & Recommendations
+## Project Workflow
 
-## Dataset Requirements
+Sales Data
+↓
+Demand Forecasting Agent
+↓
+Inventory Analysis Agent
+↓
+Expiry Monitoring Agent
+↓
+Waste Reduction Agent
+↓
+Business Insights Engine
+↓
+Streamlit Dashboard
 
-### Sales Data
+---
 
-* Date
-* Product ID
-* Units Sold
-* Revenue
+## Business Benefits
 
-### Inventory Data
+* Reduce food waste
+* Improve inventory turnover
+* Increase profitability
+* Optimize purchasing decisions
+* Improve sustainability metrics
+* Enable data-driven inventory management
 
-* Product ID
-* Inventory Level
-* Units Ordered
-* Category
-
-### Expiry Data
-
-* Product
-* Batch ID
-* Quantity
-* Expiry Date
-
-## Dashboard Features
-
-### KPIs
-
-* Total Products
-* Inventory Value
-* Forecasted Demand
-* Expiring Products
-* Waste Risk Score
-* Estimated Savings
-
-### Visualizations
-
-* Demand Forecast Trends
-* Inventory Distribution
-* Expiry Risk Analysis
-* Waste Reduction Impact
-
-## Business Impact
-
-The solution helps supermarkets:
-
-* Reduce food waste by identifying products at risk of expiry.
-* Improve inventory planning using demand forecasts.
-* Increase profitability through dynamic pricing recommendations.
-* Support sustainability initiatives and responsible retail practices.
-
-## Expected Outcomes
-
-* Reduced inventory waste
-* Improved stock availability
-* Better demand forecasting accuracy
-* Increased revenue recovery from near-expiry products
-* Enhanced operational efficiency
+---
 
 ## Future Enhancements
 
-* Integration with ERP systems
-* IoT-enabled smart shelf monitoring
+* Dynamic pricing recommendations
+* Supplier optimization
 * Multi-store inventory balancing
-* Real-time pricing automation
-* Advanced AI-powered supply chain optimization
+* Real-time stock monitoring
+* Food donation recommendation engine
+* RAG-powered supermarket assistant
+
+---
 
 ## Installation
 
@@ -171,12 +231,10 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Project Status
-
-Hackathon Prototype | AI + ML + RAG + Agentic AI
-
 ## Author
 
 Siva Veludurthi
 
-Empowering businesses through AI-driven solutions for sustainability, operational excellence, and data-driven decision-making.
+AI | Data Analytics | Education | Workforce Development
+
+Building AI-powered solutions for sustainable retail and inventory optimization.
