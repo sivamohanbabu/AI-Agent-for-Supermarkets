@@ -223,7 +223,7 @@ Streamlit Dashboard
 ## Installation
 
 ```bash
-git clone https://github.com/your-username/smart-food-waste-ai-agent.git](https://github.com/sivamohanbabu/AI-Agent-for-Supermarkets.git
+git clone https://github.com/sivamohanbabu/AI-Agent-for-Supermarkets.git
 
 cd smart-food-waste-ai-agent
 
