@@ -13,7 +13,7 @@ from agents.inventory_agent import optimize_inventory
 from agents.pricing_agent import apply_dynamic_pricing
 from agents.rag_agent import RagAssistant
 from agents.rescue_agent import recommend_food_rescue
-from agents.supervisor_agent import final_recommendation_report
+from agents.supervisor_agent import final_recommendation_report, get_last_execution_logs
 
 
 BASE_DIR = Path(__file__).parent
@@ -648,6 +648,21 @@ def main() -> None:
                 mime="text/csv",
                 use_container_width=True,
             )
+            st.markdown("---")
+            with st.expander("🤖 Multi-Agent Orchestration Log (LangGraph & CrewAI)", expanded=True):
+                logs = get_last_execution_logs()
+                if logs:
+                    for log in logs:
+                        if "[LangGraph" in log:
+                            st.markdown(f"**🟢 {log}**")
+                        elif "[CrewAI Agent" in log:
+                            st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;🤖 *{log}*")
+                        elif "[CrewAI]" in log:
+                            st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;⚙️ ` {log} `")
+                        else:
+                            st.markdown(f"&nbsp;&nbsp;&nbsp;&nbsp;🔹 {log}")
+                else:
+                    st.info("Run the report to see the multi-agent execution steps.")
 
 
 if __name__ == "__main__":
