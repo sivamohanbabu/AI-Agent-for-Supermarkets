@@ -1,0 +1,11 @@
+product_id,product_name,category,current_stock,unit_cost,selling_price,expiry_date,daily_sales_avg,shelf_life_days,supplier
+P001,Milk 1L,Dairy,200,0.70,1.20,2026-06-17,48,7,FreshFarm
+P002,Yogurt Cup,Dairy,160,0.45,0.90,2026-06-16,55,10,FreshFarm
+P003,Bread Loaf,Bakery,120,0.80,1.60,2026-06-18,38,5,BakeHouse
+P004,Spinach Pack,Produce,90,0.60,1.30,2026-06-15,28,4,GreenLeaf
+P005,Apples 1kg,Produce,240,1.10,2.20,2026-06-27,32,21,OrchardCo
+P006,Chicken Breast,Meat,75,3.20,5.60,2026-06-19,22,6,PrimeMeat
+P007,Paneer 200g,Dairy,140,1.20,2.10,2026-06-22,26,12,FreshFarm
+P008,Orange Juice,Beverages,180,0.95,1.80,2026-06-29,24,18,CitrusCo
+P009,Tomatoes 1kg,Produce,210,0.75,1.50,2026-06-20,44,9,GreenLeaf
+P010,Ready Salad,Prepared Foods,65,1.50,3.25,2026-06-16,18,5,KitchenHub
