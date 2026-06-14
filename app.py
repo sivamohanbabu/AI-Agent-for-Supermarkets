@@ -9,6 +9,9 @@ import streamlit as st
 
 from agents.forecasting_agent import forecast_product_demand, sales_trend
 from agents.inventory_agent import optimize_inventory
+from agents.expiry_agent import monitor_expiry
+from agents.pricing_agent import apply_dynamic_pricing
+from agents.rescue_agent import recommend_food_rescue
 
 
 BASE_DIR = Path(__file__).parent
@@ -81,7 +84,9 @@ def main() -> None:
     sales = uploaded_or_sample(sales_file, DATA_DIR / "sales_data.csv")
     inventory = prepare_inventory(uploaded_or_sample(inventory_file, DATA_DIR / "inventory.csv"))
 
-    dashboard_tab, forecast_tab = st.tabs(["Dashboard", "Forecasting & Optimization"])
+    dashboard_tab, forecast_tab, waste_tab = st.tabs(
+        ["Dashboard", "Forecasting & Optimization", "Waste Reduction"]
+    )
 
     with dashboard_tab:
         render_metric_cards(inventory)
@@ -182,6 +187,68 @@ Recommended Reorder:
         }
         optimization = optimize_inventory(inventory, all_forecasts)
         st.dataframe(optimization, use_container_width=True, hide_index=True)
+
+    with waste_tab:
+        st.subheader("AI Waste Reduction System")
+
+        expiry = monitor_expiry(inventory)
+        pricing = apply_dynamic_pricing(expiry)
+        rescue = recommend_food_rescue(pricing)
+
+        critical_count = int((rescue["expiry_status"] == "Critical").sum())
+        warning_count = int((rescue["expiry_status"] == "Warning").sum())
+        attention_count = int((rescue["expiry_status"] == "Attention").sum())
+
+        metric_cols = st.columns(3)
+        metric_cols[0].metric("Critical: <= 3 Days", critical_count)
+        metric_cols[1].metric("Warning: <= 7 Days", warning_count)
+        metric_cols[2].metric("Attention: <= 15 Days", attention_count)
+
+        st.markdown("#### Expiry Monitoring Agent")
+        st.dataframe(
+            rescue[
+                [
+                    "product_name",
+                    "category",
+                    "current_stock",
+                    "expiry_date",
+                    "days_to_expiry",
+                    "expiry_status",
+                ]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        st.markdown("#### Dynamic Pricing Agent")
+        st.dataframe(
+            rescue[
+                [
+                    "product_name",
+                    "selling_price",
+                    "recommended_discount_pct",
+                    "discounted_price",
+                    "expiry_status",
+                ]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        st.markdown("#### Food Rescue Recommendation Agent")
+        st.dataframe(
+            rescue[
+                [
+                    "product_name",
+                    "current_stock",
+                    "days_to_expiry",
+                    "recommended_discount_pct",
+                    "food_rescue_action",
+                ]
+            ],
+            use_container_width=True,
+            hide_index=True,
+        )
 
 
 if __name__ == "__main__":

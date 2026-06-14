@@ -29,3 +29,9 @@ streamlit run app.py
 - Sales trend visualization
 - Inventory optimization agent
 - Overstock, understock, and reorder recommendations
+
+## Phase 3 Status
+
+- Expiry monitoring agent with Critical, Warning, Attention, and Normal bands
+- Dynamic pricing agent using 30%, 20%, and 10% discount rules
+- Food rescue recommendation agent for discount campaigns, bundles, NGO donation, and store transfer
