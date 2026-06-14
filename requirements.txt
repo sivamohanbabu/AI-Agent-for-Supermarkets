@@ -4,4 +4,7 @@ plotly>=5.22
 chromadb>=0.5
 langgraph>=1.2.4
 crewai>=1.14.6
+fastapi
+uvicorn
+
 
